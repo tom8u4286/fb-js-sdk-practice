@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--
+    Facebook Code Example
+    @author: LittleQ <littleq0903@gmail.com>
+    @date: 2013-11-23
+    -->
+    <meta charset="UTF-8">
+    <title>FB API EXAMPLE</title>
+    <!-- BLOCK: Loading libraries -->
+    <script src="./your_secret.js"></script>
+    <script src="../your_secret.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <!-- ENDBLOCK: Loading libraries -->
+</head>
+
+<body>
+    <!-- BLOCK: FB SDK initialization -->
+    <script>
+    console.log("1");
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId: FacebookAppId,
+            xfbml: true,
+            version: 'v2.5'
+        });
+        console.log("Init successful!");
+        console.log("2");
+        window.fbLoaded();
+    };    
+
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "http://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    console.log("3");
+    window.fbLoaded = function() {
+        // define the events when login status changed.
+        console.log("4");
+        FB.Event.subscribe('auth.login', function(response) {
+            // when user has been logged in, this block will be triggered.
+            var msg = "You're logged in.";
+            $("#my-login-message").html(msg);
+            console.log("Your login response:");
+            console.log(response);
+        });
+
+        console.log("5");
+        // define the action when user clicked the login button.
+        $("#my-login-button").click(function() {
+            FB.login();
+        });
+    };
+    console.log("6");
+    </script>
+    <!-- ENDBLOCK: FB SDK initialization -->
+    <!-- BLOCK: Your playground -->
+    <!-- Button for login to Facebook -->
+    <div id="my-html-playground" class="container">
+        <div id="my-login-control" class="well">
+            <button id="my-login-button" class="btn btn-primary">Login with Facebook</button>
+            <div class="fb-login-button" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="true"></div>
+            <p id="my-login-message"></p>
+        </div>
+    </div>
+    <!-- ENDBLOCK: Your playground -->
+    <!-- BLOCK: Your script playground -->
+    <script id="my-script-playground">
+
+    </script>
+    <!-- ENDBLOCK: Your script playground -->
+</body>
+
+</html>
