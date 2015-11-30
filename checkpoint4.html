@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--
+    Facebook JavaScript SDK Practice
+    author:tom8u4286
+    date:2015-11-27
+    -->
+    <title>fb-js-sdk-practice</title>
+    <script src="./App_Id.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <!-- The snippet of code initializing Facebook JavaScript SDK should be put here below!-->
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: FacebookAppId,
+                xfbml: true,
+                version: 'v2.5'
+            });
+            initCheck();
+            window.fbloaded();
+        };
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/all/debug.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+
+
+
+
+
+
+
+
+    <!--Below is the html testing section. Put your elements here!-->
+    <div id="testing-section" class="container">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h1 id="status-msg"></h1>
+                <button id="my-button" class="btn btn-primary">Facebook Login</button>
+                <button id="share-button" class="btn btn-primary">Sharing on FB</button>
+            </div>
+        </div>
+        <img id="my-profile-picture" class="img-rounded" src="">
+        <h1 id="welcome-msg"></h1>
+        <div class="fb-comments" data-href="https://my-fisrt-app-tom8u4286.c9users.io/fb-js-sdk-practice/index.html" data-numposts="5"></div>
+    </div>
+
+
+
+
+
+
+
+
+    <!--Below is the script section. Put your script here!-->
+    <script>
+        var initCheck = function() {
+            var msg = "Init Successful! Your App ID:" + FacebookAppId;
+            $("#status-msg").html(msg);
+        }
+
+        var loginCheck = function() {
+            FB.getLoginStatus(function(response) {
+                console.log("getLoginStatus()");
+                if (response.status === 'connected') {
+                    FB.logout(function(response) {
+                        $("#my-button").html("Facebook Login");
+                    });
+                }
+                else {
+                    FB.login(function(response) {
+                        $("#my-button").html("Facebook Logout");
+                    });
+                }
+            });
+        }
+
+        var sharing = function(){
+            FB.ui({
+                method: 'share',
+                href:'https://my-fisrt-app-tom8u4286.c9users.io/fb-js-sdk-practice/index.html',
+            },function(response){});
+        }
+
+        $("#my-button").click(function() {
+            loginCheck();
+        });
+
+        $("#share-button").click(function(){
+            sharing();
+        });
+
+
+        window.fbloaded = function() {
+            FB.Event.subscribe('auth.statusChange', function(response) {
+                if (response.status === 'connected') {
+                    var msg1 = "Login Successful!";
+                    $("#status-msg").html(msg1);
+
+                    FB.api("/me/picture?width=250", function(response) {
+                        $("#my-profile-picture").attr("src", response.data.url);
+                    });
+
+                    FB.api("/me", function(response) {
+                        $("#welcome-msg").html("Welcome!" + response.name + "~");
+                    });
+                }
+                else {
+                    var msg2 = "Logout Successful!";
+                    $("#status-msg").html(msg2);
+                }
+            });
+
+        }
+    </script>
+</body>
+
+</html>
